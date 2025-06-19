@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.1 (Python 3.12.5 on darwin)" generated="2025-06-19T20:08:01.580178" rpa="false" schemaversion="5">
+<suite id="s1" name="Command Tests" source="/Users/nitin/Code/SpatialNetworksTest/command_tests.robot">
+<kw name="Start FastAPI Server" type="SETUP">
+<kw name="Start Process" owner="Process">
+<msg time="2025-06-19T20:08:01.944354" level="INFO">Starting process:
+uvicorn main:app --reload</msg>
+<arg>uvicorn</arg>
+<arg>main:app</arg>
+<arg>--reload</arg>
+<arg>shell=True</arg>
+<arg>stdout=server.log</arg>
+<arg>stderr=server.log</arg>
+<doc>Starts a new process on background.</doc>
+<status status="PASS" start="2025-06-19T20:08:01.943109" elapsed="0.011420"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2025-06-19T20:08:03.966549" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2025-06-19T20:08:01.956060" elapsed="2.010778"/>
+</kw>
+<status status="PASS" start="2025-06-19T20:08:01.941707" elapsed="2.025615"/>
+</kw>
+<test id="s1-t1" name="Connection Validation" line="16">
+<kw name="Send Command" owner="HttpClientLibrary">
+<arg>${POSITIVE_CMD}</arg>
+<doc>Send a command to the /command endpoint and store the response.</doc>
+<status status="PASS" start="2025-06-19T20:08:03.971731" elapsed="0.750622"/>
+</kw>
+<kw name="Response Status Should Be" owner="HttpClientLibrary">
+<arg>200</arg>
+<doc>Assert that the last response status code matches the expected value.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.723063" elapsed="0.000258"/>
+</kw>
+<tag>connection</tag>
+<status status="PASS" start="2025-06-19T20:08:03.967734" elapsed="0.756033"/>
+</test>
+<test id="s1-t2" name="Positive Command Returns Expected Response" line="21">
+<kw name="Send Command" owner="HttpClientLibrary">
+<arg>${POSITIVE_CMD}</arg>
+<doc>Send a command to the /command endpoint and store the response.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.726190" elapsed="0.033019"/>
+</kw>
+<kw name="Response Status Should Be" owner="HttpClientLibrary">
+<arg>200</arg>
+<doc>Assert that the last response status code matches the expected value.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.759632" elapsed="0.000359"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.761411" level="INFO">${expected} = {'response': 'Hello, client!'}</msg>
+<var>${expected}</var>
+<arg>{"response": "Hello, client!"}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.760731" elapsed="0.000765"/>
+</kw>
+<kw name="Response Should Contain" owner="HttpClientLibrary">
+<arg>${expected}</arg>
+<doc>Assert that the last response JSON contains the expected key-value pair.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.766231" elapsed="0.000960"/>
+</kw>
+<tag>positive</tag>
+<status status="PASS" start="2025-06-19T20:08:04.725103" elapsed="0.042701"/>
+</test>
+<test id="s1-t3" name="Negative Command Returns Error" line="28">
+<kw name="Send Command" owner="HttpClientLibrary">
+<arg>${NEGATIVE_CMD}</arg>
+<doc>Send a command to the /command endpoint and store the response.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.790054" elapsed="0.018722"/>
+</kw>
+<kw name="Response Status Should Be" owner="HttpClientLibrary">
+<arg>400</arg>
+<doc>Assert that the last response status code matches the expected value.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.809185" elapsed="0.000392"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.810773" level="INFO">${expected} = {'error': 'Negative command'}</msg>
+<var>${expected}</var>
+<arg>{"error": "Negative command"}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.810124" elapsed="0.000735"/>
+</kw>
+<kw name="Response Should Contain" owner="HttpClientLibrary">
+<arg>${expected}</arg>
+<doc>Assert that the last response JSON contains the expected key-value pair.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.833645" elapsed="0.000817"/>
+</kw>
+<tag>negative</tag>
+<status status="PASS" start="2025-06-19T20:08:04.788261" elapsed="0.050082"/>
+</test>
+<test id="s1-t4" name="Negative Commands Return Error" line="36">
+<for flavor="IN">
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.842241" level="INFO">Sending command: FOO</msg>
+<arg>Sending command: ${cmd}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.841862" elapsed="0.000512"/>
+</kw>
+<kw name="Send Command" owner="HttpClientLibrary">
+<arg>${cmd}</arg>
+<doc>Send a command to the /command endpoint and store the response.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.842605" elapsed="0.044735"/>
+</kw>
+<kw name="Response Status Should Be" owner="HttpClientLibrary">
+<arg>400</arg>
+<doc>Assert that the last response status code matches the expected value.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.887705" elapsed="0.000432"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.889279" level="INFO">${expected} = {'error': 'Negative command'}</msg>
+<var>${expected}</var>
+<arg>{"error": "Negative command"}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.888697" elapsed="0.000669"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.890083" level="INFO">Expecting error: {'error': 'Negative command'}</msg>
+<arg>Expecting error: ${expected}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.889679" elapsed="0.000532"/>
+</kw>
+<kw name="Response Should Contain" owner="HttpClientLibrary">
+<arg>${expected}</arg>
+<doc>Assert that the last response JSON contains the expected key-value pair.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.890620" elapsed="0.000440"/>
+</kw>
+<var name="${cmd}">FOO</var>
+<status status="PASS" start="2025-06-19T20:08:04.841600" elapsed="0.049574"/>
+</iter>
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.892215" level="INFO">Sending command: DOO</msg>
+<arg>Sending command: ${cmd}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.891824" elapsed="0.000528"/>
+</kw>
+<kw name="Send Command" owner="HttpClientLibrary">
+<arg>${cmd}</arg>
+<doc>Send a command to the /command endpoint and store the response.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.892626" elapsed="0.015710"/>
+</kw>
+<kw name="Response Status Should Be" owner="HttpClientLibrary">
+<arg>400</arg>
+<doc>Assert that the last response status code matches the expected value.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.908768" elapsed="0.000458"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.910647" level="INFO">${expected} = {'error': 'Negative command'}</msg>
+<var>${expected}</var>
+<arg>{"error": "Negative command"}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.909555" elapsed="0.001190"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.911492" level="INFO">Expecting error: {'error': 'Negative command'}</msg>
+<arg>Expecting error: ${expected}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.911077" elapsed="0.000583"/>
+</kw>
+<kw name="Response Should Contain" owner="HttpClientLibrary">
+<arg>${expected}</arg>
+<doc>Assert that the last response JSON contains the expected key-value pair.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.913759" elapsed="0.000752"/>
+</kw>
+<var name="${cmd}">DOO</var>
+<status status="PASS" start="2025-06-19T20:08:04.891573" elapsed="0.023074"/>
+</iter>
+<iter>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.915687" level="INFO">Sending command: BAZ</msg>
+<arg>Sending command: ${cmd}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.915283" elapsed="0.000558"/>
+</kw>
+<kw name="Send Command" owner="HttpClientLibrary">
+<arg>${cmd}</arg>
+<doc>Send a command to the /command endpoint and store the response.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.916352" elapsed="0.007917"/>
+</kw>
+<kw name="Response Status Should Be" owner="HttpClientLibrary">
+<arg>400</arg>
+<doc>Assert that the last response status code matches the expected value.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.924615" elapsed="0.000315"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.925715" level="INFO">${expected} = {'error': 'Negative command'}</msg>
+<var>${expected}</var>
+<arg>{"error": "Negative command"}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.925200" elapsed="0.000599"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.926442" level="INFO">Expecting error: {'error': 'Negative command'}</msg>
+<arg>Expecting error: ${expected}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.926084" elapsed="0.000491"/>
+</kw>
+<kw name="Response Should Contain" owner="HttpClientLibrary">
+<arg>${expected}</arg>
+<doc>Assert that the last response JSON contains the expected key-value pair.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.927151" elapsed="0.000519"/>
+</kw>
+<var name="${cmd}">BAZ</var>
+<status status="PASS" start="2025-06-19T20:08:04.915024" elapsed="0.012812"/>
+</iter>
+<var>${cmd}</var>
+<value>@{NEGATIVE_COMMANDS}</value>
+<status status="PASS" start="2025-06-19T20:08:04.840997" elapsed="0.087070"/>
+</for>
+<tag>negative</tag>
+<status status="PASS" start="2025-06-19T20:08:04.840073" elapsed="0.088952"/>
+</test>
+<test id="s1-t5" name="Invalid Command Returns Error" line="48">
+<kw name="Send Command" owner="HttpClientLibrary">
+<arg>${INVALID_CMD}</arg>
+<doc>Send a command to the /command endpoint and store the response.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.932538" elapsed="0.036157"/>
+</kw>
+<kw name="Response Status Should Be" owner="HttpClientLibrary">
+<arg>400</arg>
+<doc>Assert that the last response status code matches the expected value.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.969172" elapsed="0.000323"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.970467" level="INFO">${expected} = {'error': 'Invalid command'}</msg>
+<var>${expected}</var>
+<arg>{"error": "Invalid command"}</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.969917" elapsed="0.000640"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-06-19T20:08:04.971356" level="INFO">Expecting error: {'error': 'Invalid command'}</msg>
+<arg>Expecting error: ${expected}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.970964" elapsed="0.000516"/>
+</kw>
+<kw name="Response Should Contain" owner="HttpClientLibrary">
+<arg>${expected}</arg>
+<doc>Assert that the last response JSON contains the expected key-value pair.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.971817" elapsed="0.000375"/>
+</kw>
+<tag>error</tag>
+<status status="PASS" start="2025-06-19T20:08:04.931554" elapsed="0.041008"/>
+</test>
+<test id="s1-t6" name="Malformed Request Returns Error" line="56">
+<kw name="Malformed Request">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-19T20:08:05.016703" level="INFO">${status} = 400</msg>
+<var>${status}</var>
+<arg>__import__('requests').post('${SERVER_URL}/command', data='{}').status_code</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-19T20:08:04.975996" elapsed="0.040944"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<msg time="2025-06-19T20:08:05.018142" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<arg>${status}</arg>
+<arg>400</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-06-19T20:08:05.017476" elapsed="0.001022"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-06-19T20:08:05.026942" level="INFO">${json} = {'error': 'Malformed request'}</msg>
+<var>${json}</var>
+<arg>__import__('requests').post('${SERVER_URL}/command', data='{}').json()</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-06-19T20:08:05.018850" elapsed="0.008648"/>
+</kw>
+<kw name="Should Be Equal As Strings" owner="BuiltIn">
+<arg>${json}[error]</arg>
+<arg>Malformed request</arg>
+<doc>Fails if objects are unequal after converting them to strings.</doc>
+<status status="PASS" start="2025-06-19T20:08:05.028771" elapsed="0.000659"/>
+</kw>
+<tag>error</tag>
+<status status="PASS" start="2025-06-19T20:08:04.975173" elapsed="0.054469"/>
+</kw>
+<tag>error</tag>
+<status status="PASS" start="2025-06-19T20:08:04.973493" elapsed="0.056693"/>
+</test>
+<kw name="Stop FastAPI Server" type="TEARDOWN">
+<kw name="Terminate All Processes" owner="Process">
+<msg time="2025-06-19T20:08:05.035017" level="INFO">Gracefully terminating process.</msg>
+<msg time="2025-06-19T20:08:05.344863" level="INFO">Process completed.</msg>
+<doc>Terminates all still running processes started by this library.</doc>
+<status status="PASS" start="2025-06-19T20:08:05.034669" elapsed="0.310513"/>
+</kw>
+<status status="PASS" start="2025-06-19T20:08:05.033512" elapsed="0.311866"/>
+</kw>
+<status status="PASS" start="2025-06-19T20:08:01.583667" elapsed="3.761805"/>
+</suite>
+<statistics>
+<total>
+<stat pass="6" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="1" fail="0" skip="0">connection</stat>
+<stat pass="2" fail="0" skip="0">error</stat>
+<stat pass="2" fail="0" skip="0">negative</stat>
+<stat pass="1" fail="0" skip="0">positive</stat>
+</tag>
+<suite>
+<stat name="Command Tests" id="s1" pass="6" fail="0" skip="0">Command Tests</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
